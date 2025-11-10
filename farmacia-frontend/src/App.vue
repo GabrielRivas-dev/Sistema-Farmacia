@@ -10,6 +10,7 @@ import Register from './views/Register.vue'
 import AppFooter from './views/AppFooter.vue'
 import Profile from './views/profile.vue'
 import CheckoutPage from './views/CheckoutPage.vue'
+import AdminPanel from './components/AdminPanel.vue'
 
 // Estado para la página actual
 const currentPage = ref('products')
@@ -23,6 +24,9 @@ const { isOpen } = storeToRefs(cartStore)
 const navigateTo = (page) => {
   currentPage.value = page
   window.history.pushState({}, '', `/${page === 'products' ? '' : page}`)
+}
+const isAdmin = () => {
+  return currentUser.value?.role === 'admin'
 }
 
 // Función para manejar login exitoso
@@ -45,23 +49,37 @@ onMounted(() => {
   if (userData) {
     currentUser.value = JSON.parse(userData)
   }
+})
 
   // Manejar navegación del navegador
   window.addEventListener('popstate', () => {
-    const path = window.location.pathname
-    if (path === '/login') currentPage.value = 'login'
-    else if (path === '/register') currentPage.value = 'register'
-    else currentPage.value = 'products'
+    const path = window.location.pathname.substring(1)
+    const validPages = ['products', 'login', 'register', 'profile', 'admin']
+    if (validPages.includes(path)) {
+      currentPage.value = path
+    } else {
+      currentPage.value = 'products'
+    }
   })
-})
+    const initialPath = window.location.pathname.substring(1)
+  if (initialPath && ['login', 'register', 'profile', 'admin'].includes(initialPath)) {
+    currentPage.value = initialPath
+  }
+
 </script>
 
 <template>
+  
   <Header 
     @navigate="navigateTo" 
     :user="currentUser"
   />
   <main>
+    <AdminPanel 
+      v-if="currentPage === 'admin' && currentUser?.role === 'admin'"
+      :user="currentUser"
+      @navigate="navigateTo"
+    />
     <Products 
       v-if="currentPage === 'products'" 
       :user="currentUser"

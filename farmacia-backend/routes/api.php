@@ -31,3 +31,21 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Aquí puedes agregar más rutas protegidas en el futuro
 });
+
+Route::middleware(['auth:sanctum', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/dashboard-stats', [AdminController::class, 'dashboardStats']);
+    
+    // User management
+    Route::get('/users', [AdminController::class, 'getUsers']);
+    Route::put('/users/{id}', [AdminController::class, 'updateUser']);
+    
+    // Product management
+    Route::get('/products', [AdminController::class, 'getProducts']);
+    Route::post('/products', [AdminController::class, 'createProduct']);
+    Route::put('/products/{id}', [AdminController::class, 'updateProduct']);
+    Route::delete('/products/{id}', [AdminController::class, 'deleteProduct']);
+    
+    // Order management
+    Route::get('/orders', [AdminController::class, 'getOrders']);
+    Route::put('/orders/{id}/status', [AdminController::class, 'updateOrderStatus']);
+});

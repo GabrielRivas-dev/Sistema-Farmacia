@@ -131,6 +131,15 @@ export default {
                 <span class="btn-icon">🚪</span>
                 Salir
               </button>
+              <!-- En la sección de user-actions, agregar este botón -->
+<button 
+  v-if="user?.role === 'admin'" 
+  class="user-btn btn-admin" 
+  @click="$emit('navigate', 'admin')"
+>
+  <span class="btn-icon">⚙️</span>
+  Admin
+</button>
             </div>
           </div>
           
@@ -203,6 +212,16 @@ export default {
 
 .brand-text {
   line-height: 1.2;
+}
+.btn-admin {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border-color: #8b5cf6;
+}
+
+.btn-admin:hover {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  border-color: #7c3aed;
 }
 
 .brand-name {

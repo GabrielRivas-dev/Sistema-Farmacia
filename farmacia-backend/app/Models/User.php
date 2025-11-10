@@ -19,6 +19,7 @@ class User extends Authenticatable
         'cedula',
         'fecha_nacimiento',
         'direccion',
+        'role',
     ];
 
     protected $hidden = [
@@ -30,5 +31,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'fecha_nacimiento' => 'date',
+         'is_active' => 'boolean',
     ];
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+    
+    
 }
